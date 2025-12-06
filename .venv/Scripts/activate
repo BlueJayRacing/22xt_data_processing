@@ -35,7 +35,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="C:\Users\Jacki\OneDrive\Documents\Python\Bajablast\jump\.venv"
+VIRTUAL_ENV="c:\Users\Jacki\OneDrive\Documents\Python\Bajablast\data_processing\.venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
