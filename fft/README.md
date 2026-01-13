@@ -13,3 +13,10 @@ WSG path: car/src/car/src/wsg_drive/data/driver.cpp (line 213) channel/time/chan
 Data path in google drive: 2026 - design -data - daq
 
 network mounted drive is shared storage location to connect to NAS 
+
+
+
+Intersession //
+
+write bugs down
+doc code 
