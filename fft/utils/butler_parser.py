@@ -16,6 +16,7 @@ def parser(file):
     # get rid of erroneous values 
     df = df.loc[df["value"] < 20000]
 
+
     return df
 
 def plot(df):
