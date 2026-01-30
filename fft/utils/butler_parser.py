@@ -5,23 +5,23 @@ import matplotlib.lines as mlines
 import numpy as np
 # for parsing the data found in the Butler folder 
 # channel mapping; 6: front left linpot; 7: front right linpot; 12: rear left linpot; 13: rear right linpot
-def parser(file):
+
+"""Parses a CSV file and filters by specific channel IDs.
+
+    Args:
+        file (str): The path to the CSV file to be processed.
+        allowed_values (list[int]): A list of channel IDs to retain.
+
+    Returns:
+        pd.DataFrame: A DataFrame containing the entire CSV.
+                      NOTE: for now, only returning first 20000 entries for dev purposes
+"""
+def parser(file, allowed_values):
     data = pd.read_csv(file, skiprows=1)
-    df = data[["recorded_time_ms", "internal_channel_id", "value"]]
-    
+    df = data[["recorded_time_ms", "internal_channel_id", "value"]].copy()
     # channel 32 appears signed so unsign it to be consistent with other two channels
-    # df.loc[df["internal_channel_id"] == 32, "value"] -= 2**32
-    allowed_values = [6]
     df = df.loc[df["internal_channel_id"].isin(allowed_values)]
     df = df.head(20000)
-
-    # scale down values
-    # df["value"] /= 65536
-    # df["recorded_time_ms"] -= df["recorded_time_ms"][1]
-    # get rid of erroneous values 
-    # df = df.loc[df["value"] < 20000] 
-
-
     return df
 
 def plot(df):
