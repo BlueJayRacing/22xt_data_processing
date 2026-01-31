@@ -18,6 +18,7 @@ import numpy as np
 """
 def parser(file, allowed_values):
     data = pd.read_csv(file, skiprows=1)
+    allowed_values = [allowed_values]
     df = data[["recorded_time_ms", "internal_channel_id", "value"]].copy()
     # channel 32 appears signed so unsign it to be consistent with other two channels
     df = df.loc[df["internal_channel_id"].isin(allowed_values)]
@@ -65,8 +66,9 @@ def plot(df):
 if __name__ == "__main__":
     file_path = os.path.join("C:", "Users", "Jacki", "OneDrive", "Documents", "Python", "Bajablast", "data_20190101_001815.csv")
     file_path = r"C:\Users\Jacki\OneDrive\Documents\Python\Bajablast\ain.csv"
-    df = parser(file_path)
-    plot(df)
+    df = parser(file_path, 6)
+    print(df)
+    # plot(df)
 
 
         
