@@ -11,22 +11,31 @@ from scipy import signal
 
 def graph(x, y):
     '''
-    Docstring for graph
+    Graph
     
-    :param x: pandas series
-    :param y: pandas series
+    :x: pandas series
+    :y: pandas series
+
     :return: y values
-    :rtype: pandas series
     '''
     plt.scatter(x, y, color = "blue")
     plt.xlabel("x")
     plt.ylabel("y")
-    plt.title("test graph")
+    plt.title("Test Graph")
     plt.grid(True)
     plt.show()
-    return y
+    
 
 def high_pass_filter(sig, cutoff, fs, order=4):
+    '''
+    Uses high-pass filter to cut out low freqs
+    
+    :sig: series of signal
+    :cutoff: int of cutoff frequency
+    :fs: int of sampling frequency
+
+    :return: series of signal
+    '''
     nyquist = fs / 2
     normalized_cutoff = cutoff / nyquist
     b, a = signal.butter(order, normalized_cutoff, btype="high", analog=False)
@@ -35,18 +44,40 @@ def high_pass_filter(sig, cutoff, fs, order=4):
 
 
 def window(y):
+    '''
+    Windows signal
+    
+    :y: array of values of signal 
+    :return: array values of signal
+    '''
     # window prior to FFT
     window = np.hanning(len(y))
     y_win = window * y
-    y_filtered = y_win -np.mean(y_win)
-    y_filtered /= np.sum(window) / len(window)
-    return y_filtered
+
+    # code below is used for normalization
+    # y_filtered = y_win -np.mean(y_win)
+    # y_filtered /= np.sum(window) / len(window)
+
+    return y_win
 
 def fft(x, sampling_rate = 44100):
+    '''
+    Performs fft on sample 
     
+    :x: array of values of signal
+    :sampling_rate: int of sampling rate 
+
+    Return:
+    :Y: array of values of signal
+    :N: int of length of signal
+    :dt: int of time between samples 
+    
+    series of signal
+    '''
     N = len(x) 
     Y = np.fft.rfft(x) / N # fourier transform
     freqs = np.fft.rfftfreq(N, d=1/sampling_rate)
+    
 
     plt.plot(freqs, np.abs(Y))
     plt.title("amplitude vs. frequency bin")
@@ -63,18 +94,42 @@ def fft(x, sampling_rate = 44100):
     # plt.grid(False)
     # plt.show()
 
-    nyquist_frequency = sampling_rate / 2
-    hann = np.hanning(len(Y))
+    
     dt = 1 / sampling_rate # time between intervals
-    Y_normalized = np.abs(Y) / len(Y)
-    freqs = np.fft.fftfreq(len(Y_normalized), dt)
-    cutoff = 10  # Hz
-    fft_filtered = Y_normalized.copy()
-    fft_filtered[np.abs(freqs) > cutoff] = 0
+    
+    # nyquist_frequency = sampling_rate / 2
+    # hann = np.hanning(len(Y))
+    # Y_normalized = np.abs(Y) / len(Y)
+    # freqs = np.fft.fftfreq(len(Y_normalized), dt)
+    # cutoff = 10  # Hz
+    # fft_filtered = Y_normalized.copy()
+    # fft_filtered[np.abs(freqs) > cutoff] = 0
 
     return Y, N, dt
 
+def time(dt, nums):
+    '''
+    Docstring for time
+    
+    :dt: float of time between intervals
+    :num: array of values
+
+    :return time: array of intervals
+    '''
+    
+    time = np.arange(len(nums)) * dt # time between intervals
+    return time
+
 def inverse_fft(time, Y):
+    '''
+    Inverse fft
+    
+    :time: array of time values
+    :Y: array of values from fft
+
+    :return: none
+    '''
+
     inverse = np.fft.ifft(Y)
     real = np.real(inverse) # retrieve real numbers only
 
@@ -84,6 +139,15 @@ def inverse_fft(time, Y):
     plt.xlim(left=0)
     plt.ylabel("amplitude")
     plt.show()
+
+
+
+
+
+
+
+
+
 
 def short_time_fft(window, step_size, sampling_frequency):
     short = signal.ShortTimeFFT(window, step_size, sampling_frequency)
@@ -104,18 +168,7 @@ def parse_csv(file):
         y = data["y"].values
     return x, y 
 
-def time(dt, nums):
-    '''
-    Docstring for time
-    
-    :param dt: float - time between intervals
-    :param num: array 
 
-    :return time: array of values in seconds
-    '''
-    
-    time = np.arange(len(nums)) * dt # time between intervals
-    return time
 
 
 def random_csv(filename, pairs = 100, min_value = 0, max_value = 100):
