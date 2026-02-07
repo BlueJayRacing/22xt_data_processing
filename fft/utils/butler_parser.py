@@ -20,7 +20,7 @@ def parser(file):
     df = data[["recorded_time_ms", "internal_channel_id", "value"]].copy()
     # channel 32 appears signed so unsign it to be consistent with other two channels
     # df = df.loc[df["internal_channel_id"].isin(allowed_values)]
-    df = df.head(20000)
+    # df = df.head(20000)
     return df
 
 def extract_channel(df, channel):
