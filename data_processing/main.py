@@ -57,22 +57,10 @@ if __name__ == "__main__":
     grapher.line_plot(x, signal)
     filtered_signal = sig.high_pass_filter(signal, cutoff, fs)
     windowed_signal = sig.window(filtered_signal)
-    Y, N, dt = sig.fft(windowed_signal)
-
     grapher.spectrogram_plot(windowed_signal)
 
-
-
-
     #signal processing 
-    # x, signal = df["recorded_time_ms"], df["value"]  
-    # grapher.scat_plot(x, signal, "Time-domain graph")
-    # filtered_signal = sig.high_pass_filter(signal, cutoff, fs)
-    # windowed_signal = sig.window(filtered_signal)
-    # Y, N, dt = sig.fft(windowed_signal)
-    # time = sig.time(dt, Y)
-    # sig.inverse_fft(time, Y)
-    # print(Y)
+   
     freqs, Y, fft_signal, N, dt = sig.fft(windowed_signal)
     grapher.line_plot(freqs, fft_signal, "FFT Signal", "frequency bins", "amplitude")
     time = sig.time(dt, Y)
