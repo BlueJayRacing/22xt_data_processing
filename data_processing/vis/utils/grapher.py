@@ -2,6 +2,8 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import math
+from scipy.signal import spectrogram
+import numpy as np
 
 
 
@@ -22,7 +24,7 @@ def time_plot(df, allowed_values):
     num_channels = len(allowed_values)
     cols = 2
     rows = math.ceil(num_channels / cols)
-    fig, axes = plt.subplots(rows, cols, figsize=(12, 4 * rows))
+    fig, axes = plt.subplots(rows, cols, figsize=(12, 4 * rows), squeeze=False)
     if num_channels == 1:
         axes_flat = [axes]
     else:
@@ -81,4 +83,27 @@ def line_plot(x, y, title="Graph", xlabel="x", ylabel="y"):
     plt.title(title)
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
+    plt.show()
+
+def spectrogram_plot(signal):
+    f, t_spec, Sxx = spectrogram(
+        signal,
+        fs=993,
+        window='hann',
+        nperseg=120,
+        noverlap=10,
+        scaling='density',
+        mode='magnitude'
+    )
+
+    Sxx_dB = 10 * np.log10(Sxx + 1e-12)
+
+    # Plot
+    plt.figure(figsize=(8,4))
+    plt.pcolormesh(t_spec, f, Sxx_dB, shading='gouraud')
+    plt.ylabel('Frequency [Hz]')
+    plt.xlabel('Time [s]')
+    plt.title('Spectrogram')
+    plt.colorbar(label='Magnitude')
+    plt.tight_layout()
     plt.show()

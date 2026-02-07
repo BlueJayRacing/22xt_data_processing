@@ -5,6 +5,8 @@ from vis.utils import grapher
 
 
 
+
+
 def ask_user_channels(allowed_list):
     """Asks user for channels and validates against a master list."""
     while True:
@@ -32,9 +34,9 @@ def ask_user_channels(allowed_list):
             print("Error: Please enter numbers only (digits and spaces).")
 
 if __name__ == "__main__":
-    file_path = os.path.join("C:", "Users", "Jacki", "OneDrive", "Documents", "Python", "Bajablast", "data_20190101_001815.csv")
-    file_path = r"C:\Users\Jacki\OneDrive\Documents\Python\Bajablast\ain.csv"
-    # file_path = "fft/utils/data_20251018_132908.csv"
+    # file_path = os.path.join("C:", "Users", "Jacki", "OneDrive", "Documents", "Python", "Bajablast", "data_20190101_001815.csv")
+    # file_path = r"C:\Users\Jacki\OneDrive\Documents\Python\Bajablast\ain.csv"
+    file_path = "fft/utils/data_20251018_132908.csv"
     #variables (change these)
     cutoff = 20
     fs = 993
@@ -47,15 +49,29 @@ if __name__ == "__main__":
     ask_user_channels(unique_channels)
     user_input = input("Enter channel(s) you want to plot: ")
     allowed_values = [int(x) for x in user_input.split()]
-    parser.extract_channel(df,allowed_values)
+    grapher.time_plot(df,allowed_values)
 
-    #signal processing 
-    x, signal = df["recorded_time_ms"], df["value"]  
-    grapher.scat_plot(x, signal, "Time-domain graph")
+    df_small = parser.extract_channel(df, 6)
+    x = df_small["recorded_time_ms"] 
+    signal = df_small["value"] 
+    # signal = signal - 10000000
+    grapher.line_plot(x, signal)
     filtered_signal = sig.high_pass_filter(signal, cutoff, fs)
     windowed_signal = sig.window(filtered_signal)
     Y, N, dt = sig.fft(windowed_signal)
-    time = sig.time(dt, Y)
-    sig.inverse_fft(time, Y)
-    print(Y)
+
+    grapher.spectrogram_plot(windowed_signal)
+
+
+
+
+    #signal processing 
+    # x, signal = df["recorded_time_ms"], df["value"]  
+    # grapher.scat_plot(x, signal, "Time-domain graph")
+    # filtered_signal = sig.high_pass_filter(signal, cutoff, fs)
+    # windowed_signal = sig.window(filtered_signal)
+    # Y, N, dt = sig.fft(windowed_signal)
+    # time = sig.time(dt, Y)
+    # sig.inverse_fft(time, Y)
+    # print(Y)
 

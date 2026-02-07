@@ -62,11 +62,11 @@ def fft(x, sampling_rate = 44100):
     freqs = np.fft.rfftfreq(N, d=1/sampling_rate)
     
 
-    plt.plot(freqs, np.abs(Y))
-    plt.title("amplitude vs. frequency bin")
-    plt.xlabel("Frequency bins")
-    plt.ylabel("amplitude")
-    plt.show()
+    # plt.plot(freqs, np.abs(Y))
+    # plt.title("amplitude vs. frequency bin")
+    # plt.xlabel("Frequency bins")
+    # plt.ylabel("amplitude")
+    # plt.show()
 
     
 
@@ -116,12 +116,12 @@ def inverse_fft(time, Y):
     inverse = np.fft.ifft(Y)
     real = np.real(inverse) # retrieve real numbers only
 
-    plt.plot(time, real)
-    plt.title("Inverse FFT")
-    plt.xlabel("time")
-    plt.xlim(left=0)
-    plt.ylabel("amplitude")
-    plt.show()
+    # plt.plot(time, real)
+    # plt.title("Inverse FFT")
+    # plt.xlabel("time")
+    # plt.xlim(left=0)
+    # plt.ylabel("amplitude")
+    # plt.show()
 
 
 
