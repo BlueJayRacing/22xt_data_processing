@@ -35,12 +35,12 @@ if __name__ == "__main__":
     # file_path = os.path.join("C:", "Users", "Jacki", "OneDrive", "Documents", "Python", "Bajablast", "data_20190101_001815.csv")
     # file_path = r"C:\Users\Jacki\OneDrive\Documents\Python\Bajablast\ain.csv"
     file_path = "fft/utils/data_20251018_132908.csv"
-    # df = butler.parser(file_path)
-    # unique_channels = df["internal_channel_id"].unique()
-    # ask_user_channels(unique_channels)
-    # user_input = input("Enter channel(s) you want to plot: ")
-    # allowed_values = [int(x) for x in user_input.split()]
-    # butler.time_plot(df,allowed_values)
+    df = butler.parser(file_path)
+    unique_channels = df["internal_channel_id"].unique()
+    ask_user_channels(unique_channels)
+    user_input = input("Enter channel(s) you want to plot: ")
+    allowed_values = [int(x) for x in user_input.split()]
+    butler.time_plot(df,allowed_values)
 
     # #variables (change these)
     # file_path = r"C:\Users\Jacki\OneDrive\Documents\Python\Bajablast\ain.csv"
