@@ -1,7 +1,7 @@
 import os
 import fft.utils.signal_processing as sig
 import fft.utils.parser as parser
-from vis.utils import grapher
+import vis.utils.grapher as grapher 
 
 
 
@@ -32,8 +32,9 @@ def ask_user_channels(allowed_list):
             print("Error: Please enter numbers only (digits and spaces).")
 
 if __name__ == "__main__":
-    file_path = os.path.join("C:", "Users", "Jacki", "OneDrive", "Documents", "Python", "Bajablast", "data_20190101_001815.csv")
-    file_path = r"C:\Users\Jacki\OneDrive\Documents\Python\Bajablast\ain.csv"
+    # file_path = os.path.join("C:", "Users", "Jacki", "OneDrive", "Documents", "Python", "Bajablast", "data_20190101_001815.csv")
+    # file_path = r"C:\Users\Jacki\OneDrive\Documents\Python\Bajablast\ain.csv"
+    file_path = "./butler_data_20251018_131108.csv"
     # file_path = "fft/utils/data_20251018_132908.csv"
     #variables (change these)
     cutoff = 20
@@ -54,8 +55,13 @@ if __name__ == "__main__":
     grapher.scat_plot(x, signal, "Time-domain graph")
     filtered_signal = sig.high_pass_filter(signal, cutoff, fs)
     windowed_signal = sig.window(filtered_signal)
-    Y, N, dt = sig.fft(windowed_signal)
+    freqs, Y, fft_signal, N, dt = sig.fft(windowed_signal)
+    grapher.line_plot(freqs, fft_signal, "FFT Signal", "frequency bins", "amplitude")
     time = sig.time(dt, Y)
-    sig.inverse_fft(time, Y)
-    print(Y)
+    inverse_signal = sig.inverse_fft(Y)
+    grapher.line_plot(time, inverse_signal, "Inverse FFT", "time", "amplitude")
+    
 
+
+
+    

@@ -51,7 +51,9 @@ def fft(x, sampling_rate = 44100):
     :sampling_rate: int of sampling rate 
 
     Return:
-    :Y: array of values of signal
+    :freqs: array of frequency bins
+    :Y: array of values of signal 
+    :real: array of real values of signal
     :N: int of length of signal
     :dt: int of time between samples 
     
@@ -60,14 +62,10 @@ def fft(x, sampling_rate = 44100):
     N = len(x) 
     Y = np.fft.rfft(x) / N # fourier transform
     freqs = np.fft.rfftfreq(N, d=1/sampling_rate)
+    real = np.abs(Y)
     
 
-    plt.plot(freqs, np.abs(Y))
-    plt.title("amplitude vs. frequency bin")
-    plt.xlabel("Frequency bins")
-    plt.ylabel("amplitude")
-    plt.show()
-
+    
     
 
     # plt.plot(freqs, np.abs(Y[:len(freqs)]))
@@ -88,7 +86,7 @@ def fft(x, sampling_rate = 44100):
     # fft_filtered = Y_normalized.copy()
     # fft_filtered[np.abs(freqs) > cutoff] = 0
 
-    return Y, N, dt
+    return freqs, Y, real, N, dt
 
 def time(dt, nums):
     '''
@@ -103,7 +101,7 @@ def time(dt, nums):
     time = np.arange(len(nums)) * dt # time between intervals
     return time
 
-def inverse_fft(time, Y):
+def inverse_fft(Y):
     '''
     Inverse fft
     
@@ -115,13 +113,7 @@ def inverse_fft(time, Y):
 
     inverse = np.fft.ifft(Y)
     real = np.real(inverse) # retrieve real numbers only
-
-    plt.plot(time, real)
-    plt.title("Inverse FFT")
-    plt.xlabel("time")
-    plt.xlim(left=0)
-    plt.ylabel("amplitude")
-    plt.show()
+    return real
 
 
 
@@ -131,6 +123,10 @@ def inverse_fft(time, Y):
 
 
 
+
+
+
+# We con't use the stuff below right now 
 
 def short_time_fft(window, step_size, sampling_frequency):
     short = signal.ShortTimeFFT(window, step_size, sampling_frequency)

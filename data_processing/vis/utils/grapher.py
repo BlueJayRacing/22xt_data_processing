@@ -77,6 +77,7 @@ def line_plot(x, y, title="Graph", xlabel="x", ylabel="y"):
     Returns:
         None
     '''
+    # add stuff so that we can createsubplots
     plt.plot(x, y)
     plt.title(title)
     plt.xlabel(xlabel)
