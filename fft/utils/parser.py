@@ -18,7 +18,7 @@ def graph(x, y):
 
     :return: y values
     '''
-    plt.scatter(x, y, color = "blue")
+    plt.plot(x, y, color = "blue")
     plt.xlabel("x")
     plt.ylabel("y")
     plt.title("Test Graph")
@@ -60,7 +60,7 @@ def window(y):
 
     return y_win
 
-def fft(x, sampling_rate = 44100):
+def fft(x, sampling_rate = 993):
     '''
     Performs fft on sample 
     

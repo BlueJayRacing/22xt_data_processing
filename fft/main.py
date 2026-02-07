@@ -1,6 +1,9 @@
 import utils.parser as parser
 import utils.output as output
 import utils.butler_parser as butler
+from scipy.signal import spectrogram
+import matplotlib.pyplot as plt
+import numpy as np
 
 def ask_user_channels(allowed_list):
     """Asks user for channels and validates against a master list."""
@@ -42,18 +45,46 @@ if __name__ == "__main__":
     # #variables (change these)
     # file_path = r"C:\Users\Jacki\OneDrive\Documents\Python\Bajablast\ain.csv"
     cutoff = 20
-    fs = 44100
+    fs = 993
     # allowed_values is an int, work on allowing multiple values in future perhaps 
     allowed_values = [7] 
 
     #functions
     df = butler.parser(file_path)
-    x, signal = df["recorded_time_ms"], df["value"]  
+    df_small = butler.extract_channel(df, 6)
+    x = df_small["recorded_time_ms"] 
+    signal = df_small["value"] 
+    # signal = signal - 10000000
     parser.graph(x, signal)
     filtered_signal = parser.high_pass_filter(signal, cutoff, fs)
     windowed_signal = parser.window(filtered_signal)
     Y, N, dt = parser.fft(windowed_signal)
+
+
+
+    f, t_spec, Sxx = spectrogram(
+        signal,
+        fs=993,
+        window='hann',
+        nperseg=120,
+        noverlap=10,
+        scaling='density',
+        mode='magnitude'
+    )
+
+    Sxx_dB = 10 * np.log10(Sxx + 1e-12)
+
+    # Plot
+    plt.figure(figsize=(8,4))
+    plt.pcolormesh(t_spec, f, Sxx_dB, shading='gouraud')
+    plt.ylabel('Frequency [Hz]')
+    plt.xlabel('Time [s]')
+    plt.title('Spectrogram')
+    plt.colorbar(label='Magnitude')
+    plt.tight_layout()
+    plt.show()
+
+
     time = parser.time(dt, Y)
-    parser.inverse_fft(time, Y)
     print(Y)
 
