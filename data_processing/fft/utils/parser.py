@@ -1,4 +1,5 @@
 import pandas as pd
+import glob
 
 # for parsing the data found in the Butler folder 
 # channel mapping; 6: front left linpot; 7: front right linpot; 12: rear left linpot; 13: rear right linpot
@@ -24,4 +25,60 @@ def parser(file):
 
 def extract_channel(df, channel):
     return df.loc[df["internal_channel_id"] == channel]
+
+import os
+import glob
+import pandas as pd
+
+def load_and_concat(folder=".", pattern="*.csv"):
+    paths = sorted(glob.glob(os.path.join(folder, pattern)))
+    if not paths:
+        raise FileNotFoundError(f"No CSVs found in {folder} matching {pattern}")
+
+    dfs = []
+    skipped = []
+
+    for p in paths:
+        # quick file-size guard
+        try:
+            if os.path.getsize(p) == 0:
+                skipped.append((p, "0 bytes"))
+                continue
+        except OSError as e:
+            skipped.append((p, f"os error: {e}"))
+            continue
+
+        try:
+            df = parser(p)  # <-- your existing parser() function
+            # Guard in case parser returns empty DF
+            if df is None or df.empty:
+                skipped.append((p, "parsed empty dataframe"))
+                continue
+
+            df["__source_file"] = os.path.basename(p)  # optional
+            dfs.append(df)
+
+        except pd.errors.EmptyDataError:
+            skipped.append((p, "EmptyDataError (likely empty or only skipped rows)"))
+        except Exception as e:
+            skipped.append((p, f"parse error: {type(e).__name__}: {e}"))
+
+    if not dfs:
+        msg = "No valid CSVs to concatenate.\nSkipped:\n" + "\n".join([f"- {p}: {r}" for p, r in skipped])
+        raise RuntimeError(msg)
+
+    big = pd.concat(dfs, ignore_index=True)
+
+    # Optional: sort if you have a time column
+    if "timestamp" in big.columns:
+        big = big.sort_values(["internal_channel_id", "timestamp"]).reset_index(drop=True)
+
+    # Print skipped summary (or return it)
+    if skipped:
+        print("\nSkipped files:")
+        for p, reason in skipped:
+            print(f"  - {p}  [{reason}]")
+
+    return big
+
 

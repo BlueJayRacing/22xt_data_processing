@@ -91,8 +91,8 @@ def spectrogram_plot(signal):
         signal,
         fs=993,
         window='hann',
-        nperseg=120,
-        noverlap=10,
+        nperseg=256,
+        noverlap=int(0.75 * 256),
         scaling='density',
         mode='magnitude'
     )

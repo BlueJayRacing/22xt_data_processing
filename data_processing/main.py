@@ -34,21 +34,20 @@ def ask_user_channels(allowed_list):
 if __name__ == "__main__":
     # file_path = os.path.join("C:", "Users", "Jacki", "OneDrive", "Documents", "Python", "Bajablast", "data_20190101_001815.csv")
     # file_path = r"C:\Users\Jacki\OneDrive\Documents\Python\Bajablast\ain.csv"
-    file_path = "./butler_data_20251018_131108.csv"
+    file_path = "./data_20251018_134907.csv "
+    
     # file_path = "fft/utils/data_20251018_132908.csv"
     #variables (change these)
-    cutoff = 20
+    cutoff = 150
     fs = 993
 
     #functions
 
     #parsing
-    df = parser.parser(file_path)
-    unique_channels = df["internal_channel_id"].unique()
-    ask_user_channels(unique_channels)
-    user_input = input("Enter channel(s) you want to plot: ")
-    allowed_values = [int(x) for x in user_input.split()]
-    grapher.time_plot(df,allowed_values)
+    df = parser.load_and_concat(folder="Accessory/", pattern="data_*.csv")
+    # unique_channels = df["internal_channel_id"].unique()
+    # allowed_values = ask_user_channels(unique_channels)
+    # grapher.time_plot(df,allowed_values)
 
     df_small = parser.extract_channel(df, 6)
     x = df_small["recorded_time_ms"] 
@@ -59,13 +58,13 @@ if __name__ == "__main__":
     windowed_signal = sig.window(filtered_signal)
     grapher.spectrogram_plot(windowed_signal)
 
-    #signal processing 
+    # #signal processing 
    
-    freqs, Y, fft_signal, N, dt = sig.fft(windowed_signal)
-    grapher.line_plot(freqs, fft_signal, "FFT Signal", "frequency bins", "amplitude")
-    time = sig.time(dt, Y)
-    inverse_signal = sig.inverse_fft(Y)
-    grapher.line_plot(time, inverse_signal, "Inverse FFT", "time", "amplitude")
+    # freqs, Y, fft_signal, N, dt = sig.fft(windowed_signal)
+    # grapher.line_plot(freqs, fft_signal, "FFT Signal", "frequency bins", "amplitude")
+    # time = sig.time(dt, Y)
+    # inverse_signal = sig.inverse_fft(Y)
+    # grapher.line_plot(time, inverse_signal, "Inverse FFT", "time", "amplitude")
     
 
 
