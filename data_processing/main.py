@@ -34,7 +34,7 @@ def ask_user_channels(allowed_list):
 if __name__ == "__main__":
     # file_path = os.path.join("C:", "Users", "Jacki", "OneDrive", "Documents", "Python", "Bajablast", "data_20190101_001815.csv")
     # file_path = r"C:\Users\Jacki\OneDrive\Documents\Python\Bajablast\ain.csv"
-    file_path = "./data_20251018_134907.csv "
+    file_path = "./data_20251018_131108.csv"
     
     # file_path = "fft/utils/data_20251018_132908.csv"
     #variables (change these)
@@ -50,7 +50,7 @@ if __name__ == "__main__":
     # grapher.time_plot(df,allowed_values)
 
     df_small = parser.extract_channel(df, 6)
-    x = df_small["recorded_time_ms"] 
+    x = (df_small["timestamp_us"] - 1760793074020350) / 10**6
     signal = df_small["value"] 
     # signal = signal - 10000000
     grapher.line_plot(x, signal)

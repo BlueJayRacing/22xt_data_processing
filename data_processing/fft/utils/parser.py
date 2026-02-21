@@ -18,7 +18,7 @@ import glob
 
 def parser(file):
     data = pd.read_csv(file, skiprows=1)
-    df = data[["recorded_time_ms", "internal_channel_id", "value"]].copy()
+    df = data[["timestamp_us","recorded_time_ms", "internal_channel_id", "value"]].copy()
     # channel 32 appears signed so unsign it to be consistent with other two channels
     # df = df.loc[df["internal_channel_id"].isin(allowed_values)]
     return df
