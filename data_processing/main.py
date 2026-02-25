@@ -45,20 +45,20 @@ if __name__ == "__main__":
 
     #parsing
     df = parser.load_and_concat(folder="Accessory/", pattern="data_*.csv")
-    # unique_channels = df["internal_channel_id"].unique()
-    # allowed_values = ask_user_channels(unique_channels)
-    # grapher.time_plot(df,allowed_values)
+    unique_channels = df["internal_channel_id"].unique()
+    allowed_values = ask_user_channels(unique_channels)
+    grapher.time_plot(df,allowed_values)
 
-    df_small = parser.extract_channel(df, 6)
-    x = (df_small["timestamp_us"] - 1760793074020350) / 10**6
-    signal = df_small["value"] 
-    # signal = signal - 10000000
-    x = x[1600000:2200000]
-    signal = signal[1600000:2200000]
-    grapher.line_plot(x, signal)
+    # df_small = parser.extract_channel(df, 6)
+    # x = (df_small["timestamp_us"] - 1760793074020350) / 10**6
+    # signal = df_small["value"] 
+    # # signal = signal - 10000000
+    # x = x[1600000:2200000]
+    # signal = signal[1600000:2200000]
+    # grapher.line_plot(x, signal)
     # filtered_signal = sig.high_pass_filter(signal, cutoff, fs)
     # windowed_signal = sig.window(filtered_signal)
-    grapher.spectrogram_plot(signal)
+    # grapher.spectrogram_plot(signal)
 
     # #signal processing 
    
