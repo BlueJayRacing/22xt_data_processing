@@ -23,9 +23,6 @@ def parser(file):
     # df = df.loc[df["internal_channel_id"].isin(allowed_values)]
     return df
 
-def extract_channel(df, channel):
-    return df.loc[df["internal_channel_id"] == channel]
-
 import os
 import glob
 import pandas as pd

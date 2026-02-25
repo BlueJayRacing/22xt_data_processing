@@ -1,6 +1,6 @@
 import os
 import fft.utils.signal_processing as sig
-import fft.utils.parser as parser
+import vis.utils.parser as parser
 import vis.utils.grapher as grapher 
 
 
@@ -32,11 +32,9 @@ def ask_user_channels(allowed_list):
             print("Error: Please enter numbers only (digits and spaces).")
 
 if __name__ == "__main__":
-    # file_path = os.path.join("C:", "Users", "Jacki", "OneDrive", "Documents", "Python", "Bajablast", "data_20190101_001815.csv")
-    # file_path = r"C:\Users\Jacki\OneDrive\Documents\Python\Bajablast\ain.csv"
-    file_path = "./data_20251018_131108.csv"
-    
-    # file_path = "fft/utils/data_20251018_132908.csv"
+
+    # DO NOT DELETE
+    # This is the only documentation of sampling frequency lol
     #variables (change these)
     cutoff = 150
     fs = 993
@@ -45,28 +43,16 @@ if __name__ == "__main__":
 
     #parsing
     df = parser.load_and_concat(folder="Accessory/", pattern="data_*.csv")
-    unique_channels = df["internal_channel_id"].unique()
-    allowed_values = ask_user_channels(unique_channels)
-    grapher.time_plot(df,allowed_values)
+    # unique_channels = df["internal_channel_id"].unique()
+    # allowed_values = ask_user_channels(unique_channels)
+    # grapher.time_plot(df,allowed_values)
 
-    # df_small = parser.extract_channel(df, 6)
-    # x = (df_small["timestamp_us"] - 1760793074020350) / 10**6
-    # signal = df_small["value"] 
-    # # signal = signal - 10000000
-    # x = x[1600000:2200000]
-    # signal = signal[1600000:2200000]
-    # grapher.line_plot(x, signal)
-    # filtered_signal = sig.high_pass_filter(signal, cutoff, fs)
-    # windowed_signal = sig.window(filtered_signal)
-    # grapher.spectrogram_plot(signal)
+    # Max range: 0 to 2920157 (default values)
+    # Approx. time of race: 1600000 to 2200000
+    grapher.btr_linpot_plot(df, "d", 1600000, 2200000)
+    grapher.btr_linpot_plot(df, "v", 1600000, 2200000)
+    grapher.btr_linpot_plot(df, "a", 1600000, 2200000)
 
-    # #signal processing 
-   
-    # freqs, Y, fft_signal, N, dt = sig.fft(windowed_signal)
-    # grapher.line_plot(freqs, fft_signal, "FFT Signal", "frequency bins", "amplitude")
-    # time = sig.time(dt, Y)
-    # inverse_signal = sig.inverse_fft(Y)
-    # grapher.line_plot(time, inverse_signal, "Inverse FFT", "time", "amplitude")
     
 
 

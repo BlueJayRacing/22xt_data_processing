@@ -1,11 +1,17 @@
 # Python used for visualizing graphs
-import pandas as pd
+# import pandas as pd
 import matplotlib.pyplot as plt
 import math
 from scipy.signal import spectrogram
 import numpy as np
 
 
+def extract_channel(df, channel):
+    return df.loc[df["internal_channel_id"] == channel]
+
+# might be universal but tbd
+def btr_scale_time(df):
+    return (df["timestamp_us"] - 1760793074020350) / 10**6
 
 def time_plot(df, allowed_values):
     """
@@ -106,5 +112,41 @@ def spectrogram_plot(signal):
     plt.xlabel('Time [s]')
     plt.title('Spectrogram')
     plt.colorbar(label='Magnitude')
+    plt.tight_layout()
+    plt.show()
+
+def btr_linpot_plot(df, type = "d", start_time = 0, end_time = 2920157):
+    fig, axes = plt.subplots(nrows=3, ncols=1, figsize=(10, 12), sharex=True)
+    
+
+    for idx, i in enumerate([6, 7, 12]):
+        df_small = extract_channel(df, i)
+
+        signal = df_small["value"] 
+        x = btr_scale_time(df_small)
+        x_slice = x[start_time:end_time]
+
+        # Slicing the data
+        signal_slice = signal[start_time:end_time]
+        
+        match type:
+            case "v":
+                signal_slice = np.gradient(signal_slice, x_slice)
+            case "a":
+                smooth_signal_slice = signal_slice.rolling(window=100, center=True).mean()
+                v = np.gradient(smooth_signal_slice, x_slice)
+                signal_slice = np.gradient(v, x_slice)
+            case "d":
+                print("nothing")
+        
+        
+        # 2. Plot onto the specific subplot axis
+        ax = axes[idx]
+        ax.plot(x_slice, signal_slice)
+        ax.set_title(f"Channel {i}")
+        ax.set_ylabel("Value")
+
+    # Global formatting
+    axes[-1].set_xlabel("Time (s)")
     plt.tight_layout()
     plt.show()

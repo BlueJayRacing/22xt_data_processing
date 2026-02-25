@@ -1,7 +1,7 @@
 import numpy as np
 import math
 import matplotlib.pyplot as plt
-import parser
+import data_processing.vis.utils.parser as parser
 import output
 
 
