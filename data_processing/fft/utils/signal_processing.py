@@ -7,6 +7,67 @@ import pandas as pd
 import numpy as np
 from scipy import signal
 
+def position(time, voltage, offset):
+    '''
+    Converts linear pot voltages to displacements.
+
+    Parameters:
+    
+    time(1D array): array of time measurements
+    voltage(1D array): array of voltages (same dimensions as time)
+    offset(float): ratio of millimeters / volts for lin pot 
+
+    Returns:
+
+    time(1D array): array of time measurements
+    displacement(1D array): array of displacements
+
+    '''
+    displacement = voltage * offset
+    return time, displacement
+
+def velocity(time, displacement):
+    '''
+    Converts linear pot displacement to velocity using central differences. Recommend use
+    of low-pass filter like Butterworth since high frequencies may be distorted.
+
+    Parameters:
+
+    time(1D array): array of time measurements (should have uniform time interval)
+    displacement(1D array): array of displacements
+
+    Returns: 
+
+    time(1D array): array of time measurements
+    velocity(1D array): array of velocities
+
+    '''
+    dt = np.mean(np.diff(time))
+    velocity = np.gradient(displacement, dt)
+    return time, velocity
+
+
+def acceleration(time, displacement):
+    '''
+    Converts linear pot displacement to acceleration using central differences. HIGHLY recommend use
+    of low-pass filter like Butterworth since high frequencies may be distorted.
+
+    Parameters:
+
+    time(1D array): array of time measurements (should have uniform time interval)
+    displacement(1D array): array of displacements
+
+    Returns: 
+
+    time(1D array): array of time measurements
+    acceleration(1D array): array of accelerations
+
+    '''
+    dt = np.mean(np.diff(time))
+    acceleration = np.gradient(np.gradient(displacement, dt), dt)
+    return time, acceleration
+
+
 
 
 def high_pass_filter(sig, cutoff, fs, order=4):

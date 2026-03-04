@@ -25,20 +25,17 @@ def time_plot(df, allowed_values):
     cols = 2
     rows = math.ceil(num_channels / cols)
     fig, axes = plt.subplots(rows, cols, figsize=(12, 4 * rows), squeeze=False)
-    if num_channels == 1:
-        axes_flat = [axes]
-    else:
-        axes_flat = axes.flatten()
+    axes_flat = axes.flatten()
     cmap = plt.get_cmap('tab10')
     for i, n in enumerate(allowed_values):
         ax = axes_flat[i]
         to_plot = df.loc[df["internal_channel_id"] == n]
-        ax.plot(to_plot["recorded_time_ms"], 
+        ax.plot(to_plot["timestamp_us"], 
                 to_plot["value"], 
                 linestyle="solid", 
                 linewidth=1, 
                 c=cmap(i % 10)) # Loops colors if > 10 channels
-        ax.set_xlabel("Time (ms)")
+        ax.set_xlabel("Time (us)")
         ax.set_ylabel("Value")
         ax.set_title(f"Butler Channel {n}")
         ax.grid(True, alpha=0.3)
