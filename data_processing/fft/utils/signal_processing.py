@@ -24,7 +24,7 @@ def position(time, voltage, offset):
 
     '''
     displacement = voltage * offset
-    return time, displacement
+    return displacement
 
 def velocity(time, displacement):
     '''
@@ -44,7 +44,7 @@ def velocity(time, displacement):
     '''
     dt = np.mean(np.diff(time))
     velocity = np.gradient(displacement, dt)
-    return time, velocity
+    return velocity
 
 
 def acceleration(time, displacement):
@@ -65,7 +65,7 @@ def acceleration(time, displacement):
     '''
     dt = np.mean(np.diff(time))
     acceleration = np.gradient(np.gradient(displacement, dt), dt)
-    return time, acceleration
+    return acceleration
 
 
 
