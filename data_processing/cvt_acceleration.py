@@ -37,14 +37,12 @@ def plot_engine_vs_axle(df, t_start=None, t_end=None, window_s = 1):
     engine_data = extract_channel(df, 19)
     axle_data   = extract_channel(df, 17)
 
-    # zero the timestamps
     t0 = min(engine_data["timestamp_us"].values[0], axle_data["timestamp_us"].values[0])
     engine_data = engine_data.copy()
     axle_data   = axle_data.copy()
     engine_data["timestamp_us"] -= t0
     axle_data["timestamp_us"]   -= t0
 
-    # clip to time window if provided
     if t_start is not None:
         engine_data = engine_data[engine_data["timestamp_us"] >= t_start * 1e6]
         axle_data   = axle_data[axle_data["timestamp_us"]     >= t_start * 1e6]
@@ -62,16 +60,7 @@ def plot_engine_vs_axle(df, t_start=None, t_end=None, window_s = 1):
     left  = np.searchsorted(axle_time_s, axle_time_s - window_s / 2)
     right = np.searchsorted(axle_time_s, axle_time_s + window_s / 2)
     axle_rpm = (right - left) / KNOBS[17] / window_s * 60
-
-    # interpolate axle RPM onto engine timestamps since they may not align
     axle_rpm_interp = np.interp(engine_time_s, axle_time_s, axle_rpm)
-
-    num_bins = 100
-    axle_bins = np.linspace(axle_rpm_interp.min(), axle_rpm_interp.max(), num_bins)
-    bin_indices = np.digitize(axle_rpm_interp, axle_bins)
-    
-    binned_axle   = [axle_bins[i] for i in range(1, num_bins) if np.any(bin_indices == i)]
-    binned_engine = [engine_rpm[bin_indices == i].mean() for i in range(1, num_bins) if np.any(bin_indices == i)]
 
     plt.figure(figsize=(8, 6))
     plt.scatter(axle_rpm_interp, engine_rpm, s=20, alpha=0.3)
